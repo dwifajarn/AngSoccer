@@ -5,18 +5,33 @@ on:
     branches:
       - main
       - develop
+
   pull_request:
     branches:
       - main
       - develop
 
-permissions:
-  contents: read
-
 jobs:
   tests:
 
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testing
+
+        ports:
+          - 3306:3306
+
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
 
@@ -26,23 +41,8 @@ jobs:
       - name: Setup PHP 8.5
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.5'
+          php-version: 8.5
           coverage: none
-          tools: composer:v2
-
-      - name: Validate Composer
-        run: composer validate --strict
-
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v4
-        with:
-          path: vendor
-          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
-          restore-keys: |
-            composer-${{ runner.os }}-
-
-      - name: Install Composer Dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
@@ -50,7 +50,16 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install NPM Dependencies
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Install Node Dependencies
         run: npm ci
 
       - name: Build Assets
@@ -61,25 +70,26 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Create SQLite Database
+      - name: Set Database Config
         run: |
-          mkdir -p database
-          touch database/database.sqlite
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=testing" >> .env
+          echo "DB_USERNAME=root" >> .env
+          echo "DB_PASSWORD=root" >> .env
 
-      - name: Configure Testing Environment
+      - name: Create Storage Link
+        run: php artisan storage:link
+
+      - name: Clear Cache
         run: |
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env
+          php artisan config:clear
+          php artisan route:clear
+          php artisan view:clear
 
-      - name: Run Migrations
+      - name: Run Migration
         run: php artisan migrate --force
 
       - name: Run Tests
-        run: php artisan test --no-coverage
-
-      - name: Upload Logs On Failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: laravel-logs
-          path: storage/logs
+        run: php artisan test

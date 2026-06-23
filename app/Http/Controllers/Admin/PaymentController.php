@@ -31,5 +31,5 @@ class PaymentController extends Controller
         $booking->update(['status' => 'cancelled']);
 
         return redirect()->route('admin.payments.index')->with('success', 'Pemesanan berhasil dibatalkan!');
-    }git
+    }
 }

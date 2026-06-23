@@ -78,8 +78,10 @@
                                 <td class="px-lg py-md text-right">
                                     @if($booking->status == 'pending')
                                         <a href="{{ route('pembayaran.konfirmasi', $booking->id) }}" class="inline-block px-4 py-1.5 rounded-lg bg-secondary font-label-md text-label-md text-on-secondary hover:opacity-90 transition-all text-center">Bayar</a>
+                                    @elseif($booking->status == 'paid')
+                                        <span class="text-caption text-on-surface-variant">Disetujui</span>
                                     @else
-                                        <button class="px-4 py-1.5 rounded-lg bg-surface-container-highest font-label-md text-label-md text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-all">Detail</button>
+                                        <span class="text-caption text-on-surface-variant">Dibatalkan</span>
                                     @endif
                                 </td>
                             </tr>

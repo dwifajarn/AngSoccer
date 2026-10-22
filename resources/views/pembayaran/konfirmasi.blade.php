@@ -47,26 +47,71 @@
                     </span>
                 </div>
 
-                <!-- Channel Badges -->
-                <div class="mb-6">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Metode yang didukung Duitku:</span>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-semibold text-gray-300">
-                        <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 flex items-center gap-1">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> QRIS (Semua E-Wallet &amp; M-Banking)
-                        </span>
-                        <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10">BCA VA</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10">Mandiri VA</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10">BRI VA</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10">BNI VA</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10">ShopeePay</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10">OVO</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10">DANA</span>
-                    </div>
-                </div>
-
-                <!-- Duitku Pay Button -->
-                <form action="{{ route('duitku.checkout', $booking->id) }}" method="POST">
+                <!-- Duitku Pay Form -->
+                <form action="{{ route('duitku.checkout', $booking->id) }}" method="POST" class="space-y-4">
                     @csrf
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Pilih Jalur Pembayaran Duitku:</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 cursor-pointer hover:border-emerald-500 transition-colors">
+                                <input type="radio" name="duitku_channel" value="SP" checked class="text-emerald-500 focus:ring-0">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-white leading-tight">QRIS</span>
+                                    <span class="text-[9px] text-emerald-400">Semua M-Banking</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-white/10 bg-black/40 cursor-pointer hover:border-emerald-500/40 transition-colors">
+                                <input type="radio" name="duitku_channel" value="BC" class="text-emerald-500 focus:ring-0">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-white leading-tight">BCA VA</span>
+                                    <span class="text-[9px] text-gray-400">Virtual Account</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-white/10 bg-black/40 cursor-pointer hover:border-emerald-500/40 transition-colors">
+                                <input type="radio" name="duitku_channel" value="M2" class="text-emerald-500 focus:ring-0">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-white leading-tight">Mandiri VA</span>
+                                    <span class="text-[9px] text-gray-400">Virtual Account</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-white/10 bg-black/40 cursor-pointer hover:border-emerald-500/40 transition-colors">
+                                <input type="radio" name="duitku_channel" value="BR" class="text-emerald-500 focus:ring-0">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-white leading-tight">BRI VA</span>
+                                    <span class="text-[9px] text-gray-400">Virtual Account</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-white/10 bg-black/40 cursor-pointer hover:border-emerald-500/40 transition-colors">
+                                <input type="radio" name="duitku_channel" value="I1" class="text-emerald-500 focus:ring-0">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-white leading-tight">BNI VA</span>
+                                    <span class="text-[9px] text-gray-400">Virtual Account</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-white/10 bg-black/40 cursor-pointer hover:border-emerald-500/40 transition-colors">
+                                <input type="radio" name="duitku_channel" value="DA" class="text-emerald-500 focus:ring-0">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-white leading-tight">DANA</span>
+                                    <span class="text-[9px] text-gray-400">E-Wallet</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-white/10 bg-black/40 cursor-pointer hover:border-emerald-500/40 transition-colors">
+                                <input type="radio" name="duitku_channel" value="OV" class="text-emerald-500 focus:ring-0">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-white leading-tight">OVO</span>
+                                    <span class="text-[9px] text-gray-400">E-Wallet</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-white/10 bg-black/40 cursor-pointer hover:border-emerald-500/40 transition-colors">
+                                <input type="radio" name="duitku_channel" value="NQ" class="text-emerald-500 focus:ring-0">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-white leading-tight">Nobu QRIS</span>
+                                    <span class="text-[9px] text-gray-400">QR Dinamis</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
                     <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black font-black text-sm py-4 rounded-xl shadow-xl shadow-emerald-500/25 active:scale-98 transition-all flex items-center justify-center gap-2 group">
                         <span class="material-symbols-outlined text-[22px]">payments</span>
                         <span>Bayar Sekarang via Duitku →</span>

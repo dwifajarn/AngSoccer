@@ -18,17 +18,19 @@ class DuitkuPaymentController extends Controller
     /**
      * Initiate Duitku checkout invoice and redirect to payment page
      */
-    public function checkout($bookingId)
+    public function checkout(Request $request, $bookingId)
     {
         $booking = Booking::with('lapangan')->findOrFail($bookingId);
         abort_if($booking->user_id !== Auth::id(), 403);
         abort_if($booking->status !== 'pending', 400, 'Pemesanan ini sudah tidak dalam status pending.');
 
+        $channel = $request->input('duitku_channel', 'SP');
+
         if (!empty($booking->payment_url)) {
             return redirect()->away($booking->payment_url);
         }
 
-        $result = $this->duitkuService->createInvoice($booking);
+        $result = $this->duitkuService->createInvoice($booking, $channel);
 
         if (!$result['success']) {
             return back()->with('error', $result['message'] ?? 'Gagal membuat tagihan Duitku.');

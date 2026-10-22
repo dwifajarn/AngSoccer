@@ -38,7 +38,7 @@ class DuitkuService
      *
      * @return array{success: bool, payment_url?: string, reference?: string, message?: string}
      */
-    public function createInvoice(Booking $booking): array
+    public function createInvoice(Booking $booking, string $paymentMethod = 'SP'): array
     {
         if (!$this->isConfigured()) {
             return [
@@ -54,6 +54,7 @@ class DuitkuService
         $payload = [
             'merchantCode' => $this->merchantCode,
             'paymentAmount' => $paymentAmount,
+            'paymentMethod' => $paymentMethod,
             'merchantOrderId' => $merchantOrderId,
             'productDetails' => 'Sewa ' . ($booking->lapangan->name ?? 'Lapangan') . ' (' . $booking->time . ')',
             'email' => $booking->user->email ?? 'customer@angsoccer.com',

@@ -38,4 +38,20 @@ class FieldController extends Controller
 
         return view('booking.create', compact('field', 'bookings'));
     }
+
+    public function getBookings(Request $request, $id)
+    {
+        $query = \App\Models\Booking::where('lapangan_id', $id)
+            ->whereIn('status', ['paid', 'pending']);
+
+        if ($request->filled('date')) {
+            $query->whereDate('date', $request->date);
+        } else {
+            $query->where('date', '>=', today()->toDateString());
+        }
+
+        $bookings = $query->get(['date', 'time', 'duration']);
+
+        return response()->json($bookings);
+    }
 }

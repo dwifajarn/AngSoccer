@@ -57,8 +57,18 @@
             <div class="mb-5 p-3.5 bg-emerald-500/15 border border-emerald-500/30 rounded-xl flex items-start gap-2.5 text-emerald-300 text-xs leading-relaxed animate-in fade-in duration-200">
                 <span class="material-symbols-outlined text-emerald-400 text-[18px] shrink-0 mt-0.5">check_circle</span>
                 <div>
-                    <p class="font-bold">Permintaan Terkirim</p>
+                    <p class="font-bold text-emerald-200">Permintaan Terkirim</p>
                     <p class="mt-0.5 opacity-90">{{ session('status') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if (session('error') || $errors->any())
+            <div class="mb-5 p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-2.5 text-red-300 text-xs leading-relaxed animate-in fade-in duration-200">
+                <span class="material-symbols-outlined text-red-400 text-[18px] shrink-0 mt-0.5">error</span>
+                <div class="flex-1">
+                    <p class="font-bold text-red-200">Gagal Mengirim</p>
+                    <p class="mt-0.5 opacity-90">{{ $errors->first() ?? session('error') }}</p>
                 </div>
             </div>
         @endif

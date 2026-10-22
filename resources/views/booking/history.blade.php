@@ -10,8 +10,9 @@
     </div>
 
     @if(session('success'))
-        <div class="mb-lg p-md bg-secondary-container text-on-secondary-container rounded-lg font-body-md">
-            {{ session('success') }}
+        <div class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-800 text-sm shadow-sm">
+            <span class="material-symbols-outlined text-emerald-600 text-[22px]">check_circle</span>
+            <span class="font-medium">{{ session('success') }}</span>
         </div>
     @endif
 

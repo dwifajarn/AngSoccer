@@ -49,6 +49,16 @@
             <p class="text-xs sm:text-sm text-gray-400 mt-1">Daftar sekarang dan nikmati kemudahan booking lapangan bola & mini soccer.</p>
         </div>
 
+        @if (session('error') || $errors->any())
+            <div class="mb-5 p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-2.5 text-red-300 text-xs leading-relaxed animate-in fade-in duration-200">
+                <span class="material-symbols-outlined text-red-400 text-[18px] shrink-0 mt-0.5">error</span>
+                <div class="flex-1">
+                    <p class="font-bold text-red-200">Pendaftaran Belum Berhasil</p>
+                    <p class="mt-0.5 opacity-90">{{ $errors->first() ?? session('error') }}</p>
+                </div>
+            </div>
+        @endif
+
         <form action="{{ route('register') }}" class="space-y-4" id="registrationForm" method="POST">
             @csrf
 

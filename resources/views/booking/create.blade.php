@@ -487,26 +487,27 @@
         if (!toast) {
             toast = document.createElement('div');
             toast.id = 'bookingToastAlert';
-            toast.className = 'fixed top-5 right-5 z-[9999] flex items-start gap-md p-md rounded-xl shadow-xl bg-surface-container-lowest border-l-4 transition-all duration-300 max-w-sm';
             document.body.appendChild(toast);
         }
         
         const isError = type === 'error';
-        toast.className = `fixed top-5 right-5 z-[9999] flex items-start gap-md p-md rounded-xl shadow-xl bg-surface-container-lowest border-l-4 ${isError ? 'border-error' : 'border-secondary'} transition-all duration-300 max-w-sm`;
+        toast.className = `fixed top-5 right-5 z-[9999] flex items-start gap-3 p-4 rounded-2xl shadow-2xl ${isError ? 'bg-[#1a1214]/95 border-red-500/30' : 'bg-[#121813]/95 border-emerald-500/30'} border backdrop-blur-xl text-white transition-all duration-300 max-w-sm`;
         toast.innerHTML = `
-            <span class="material-symbols-outlined ${isError ? 'text-error' : 'text-secondary'} text-[24px]">${isError ? 'warning' : 'check_circle'}</span>
-            <div class="flex-1">
-                <p class="font-bold text-sm ${isError ? 'text-error' : 'text-on-surface'}">${isError ? 'Peringatan' : 'Berhasil'}</p>
-                <p class="text-xs text-on-surface-variant mt-0.5">${message}</p>
+            <div class="w-9 h-9 rounded-xl ${isError ? 'bg-red-500/20 text-red-400 border border-red-500/40' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'} flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[20px]">${isError ? 'warning' : 'check_circle'}</span>
             </div>
-            <button type="button" onclick="this.parentElement.remove()" class="text-on-surface-variant hover:text-on-surface">
+            <div class="flex-1 pt-0.5">
+                <p class="font-bold text-sm ${isError ? 'text-red-400' : 'text-emerald-400'}">${isError ? 'Peringatan' : 'Berhasil'}</p>
+                <p class="text-xs text-gray-300 mt-0.5 leading-relaxed">${message}</p>
+            </div>
+            <button type="button" onclick="this.closest('#bookingToastAlert').remove()" class="text-gray-400 hover:text-white transition-colors p-1" aria-label="Tutup">
                 <span class="material-symbols-outlined text-[18px]">close</span>
             </button>
         `;
 
         setTimeout(() => {
             if (toast && toast.parentElement) {
-                toast.classList.add('opacity-0');
+                toast.classList.add('opacity-0', 'transition-opacity', 'duration-400');
                 setTimeout(() => toast.remove(), 400);
             }
         }, 4000);

@@ -49,6 +49,26 @@
             <p class="text-xs sm:text-sm text-gray-400 mt-1">Masuk untuk mengelola dan pesan jadwal lapangan Anda.</p>
         </div>
 
+        @if (session('error') || $errors->any())
+            <div class="mb-5 p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-2.5 text-red-300 text-xs leading-relaxed animate-in fade-in duration-200">
+                <span class="material-symbols-outlined text-red-400 text-[18px] shrink-0 mt-0.5">error</span>
+                <div class="flex-1">
+                    <p class="font-bold text-red-200">Gagal Masuk</p>
+                    <p class="mt-0.5 opacity-90">{{ $errors->first() ?? session('error') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if (session('status'))
+            <div class="mb-5 p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-start gap-2.5 text-emerald-300 text-xs leading-relaxed animate-in fade-in duration-200">
+                <span class="material-symbols-outlined text-emerald-400 text-[18px] shrink-0 mt-0.5">info</span>
+                <div class="flex-1">
+                    <p class="font-bold text-emerald-200">Informasi</p>
+                    <p class="mt-0.5 opacity-90">{{ session('status') }}</p>
+                </div>
+            </div>
+        @endif
+
         <form action="{{ route('login') }}" class="space-y-4" id="loginForm" method="POST">
             @csrf
 

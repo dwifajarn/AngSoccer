@@ -28,6 +28,11 @@
                 <span class="material-symbols-outlined">payments</span>
                 <span class="font-label-md text-label-md">Revenue</span>
             </a>
+            <!-- Jadwal Lapangan -->
+            <a class="flex items-center gap-md p-2 rounded-lg transition-all {{ request()->routeIs('admin.schedule') ? 'bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary font-bold scale-98' : 'text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-highest dark:hover:bg-inverse-surface' }}" href="{{ route('admin.schedule') }}">
+                <span class="material-symbols-outlined">calendar_month</span>
+                <span class="font-label-md text-label-md">Jadwal Lapangan</span>
+            </a>
             <!-- Profile -->
             <a class="flex items-center gap-md p-2 rounded-lg transition-all {{ request()->routeIs('admin.profile') ? 'bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary font-bold scale-98' : 'text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-highest dark:hover:bg-inverse-surface' }}" href="{{ route('admin.profile') }}">
                 <span class="material-symbols-outlined">person</span>

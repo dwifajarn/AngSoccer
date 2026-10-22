@@ -62,6 +62,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/revenue', [AdminDashboardController::class, 'revenue'])->name('admin.revenue');
         Route::get('/revenue/export', [AdminDashboardController::class, 'exportRevenueCsv'])->name('admin.revenue.export');
 
+        // Operational Schedule Matrix
+        Route::get('/schedule', [AdminDashboardController::class, 'schedule'])->name('admin.schedule');
+
         // Profile details
         Route::get('/profile', [AdminProfileController::class, 'show'])->name('admin.profile');
         Route::post('/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');

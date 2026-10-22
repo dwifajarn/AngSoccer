@@ -13,7 +13,8 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 
 // Welcome / Homepage
 Route::get('/', function () {
-    return view('landingpage');
+    $featuredFields = \App\Models\Lapangan::where('status', 'active')->take(3)->get();
+    return view('landingpage', compact('featuredFields'));
 });
 
 // Guest Auth Routes

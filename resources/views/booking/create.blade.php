@@ -482,24 +482,54 @@
     updateAvailableTimeSlots();
     updateSummary();
 
+    function showToast(message, type = 'error') {
+        let toast = document.getElementById('bookingToastAlert');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'bookingToastAlert';
+            toast.className = 'fixed top-5 right-5 z-[9999] flex items-start gap-md p-md rounded-xl shadow-xl bg-surface-container-lowest border-l-4 transition-all duration-300 max-w-sm';
+            document.body.appendChild(toast);
+        }
+        
+        const isError = type === 'error';
+        toast.className = `fixed top-5 right-5 z-[9999] flex items-start gap-md p-md rounded-xl shadow-xl bg-surface-container-lowest border-l-4 ${isError ? 'border-error' : 'border-secondary'} transition-all duration-300 max-w-sm`;
+        toast.innerHTML = `
+            <span class="material-symbols-outlined ${isError ? 'text-error' : 'text-secondary'} text-[24px]">${isError ? 'warning' : 'check_circle'}</span>
+            <div class="flex-1">
+                <p class="font-bold text-sm ${isError ? 'text-error' : 'text-on-surface'}">${isError ? 'Peringatan' : 'Berhasil'}</p>
+                <p class="text-xs text-on-surface-variant mt-0.5">${message}</p>
+            </div>
+            <button type="button" onclick="this.parentElement.remove()" class="text-on-surface-variant hover:text-on-surface">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+        `;
+
+        setTimeout(() => {
+            if (toast && toast.parentElement) {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 400);
+            }
+        }, 4000);
+    }
+
     function submitBookingForm() {
         const form = document.getElementById('bookingForm');
         const selectedTime = document.querySelector('#timeSlotsContainer input[type="radio"]:checked');
         
         if (!selectedTime) {
-            alert('Silakan pilih waktu mulai booking terlebih dahulu.');
+            showToast('Silakan pilih waktu mulai booking terlebih dahulu.');
             return;
         }
 
         if (!validateOverlap()) {
-            alert('Waktu booking Anda bertabrakan dengan pesanan lain atau melebihi jam operasional.');
+            showToast('Waktu booking Anda bertabrakan dengan pesanan lain atau melebihi jam operasional.');
             return;
         }
 
         if (form.checkValidity()) {
             form.submit();
         } else {
-            alert('Silakan lengkapi pilihan tanggal dan waktu mulai booking Anda.');
+            showToast('Silakan lengkapi pilihan tanggal dan waktu mulai booking Anda.');
         }
     }
 </script>

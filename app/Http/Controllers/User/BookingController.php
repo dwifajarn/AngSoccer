@@ -43,7 +43,7 @@ class BookingController extends Controller
         // Check for overlapping bookings
         $overlapping = Booking::where('lapangan_id', $request->lapangan_id)
             ->whereDate('date', $requestedDate)
-            ->whereIn('status', ['paid', 'pending'])
+            ->activeReservation()
             ->get()
             ->filter(function($b) use ($requestedStartHour, $requestedEndHour) {
                 $parts = explode(' - ', $b->time);
@@ -82,5 +82,16 @@ class BookingController extends Controller
 
         return redirect()->route('pembayaran.konfirmasi', $booking->id)
             ->with('success', 'Booking berhasil dibuat! Selesaikan pembayaran Anda.');
+    }
+
+    public function cancel(Booking $booking)
+    {
+        abort_if($booking->user_id !== Auth::id(), 403);
+        abort_if($booking->status !== 'pending' || $booking->payment_proof !== null, 400, 'Pesanan tidak dapat dibatalkan.');
+
+        $booking->update(['status' => 'cancelled']);
+
+        return redirect()->route('bookings.history')
+            ->with('success', 'Pemesanan #' . $booking->booking_code . ' berhasil dibatalkan dan slot telah dilepas.');
     }
 }

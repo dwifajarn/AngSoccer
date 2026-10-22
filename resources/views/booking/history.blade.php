@@ -77,7 +77,15 @@
                                 </td>
                                 <td class="px-lg py-md text-right">
                                     @if($booking->status == 'pending')
-                                        <a href="{{ route('pembayaran.konfirmasi', $booking->id) }}" class="inline-block px-4 py-1.5 rounded-lg bg-secondary font-label-md text-label-md text-on-secondary hover:opacity-90 transition-all text-center">Bayar</a>
+                                        <div class="flex items-center justify-end gap-xs">
+                                            <a href="{{ route('pembayaran.konfirmasi', $booking->id) }}" class="inline-block px-3 py-1 rounded-lg bg-secondary font-label-md text-label-md text-on-secondary hover:opacity-90 transition-all text-center">Bayar</a>
+                                            @if(!$booking->payment_proof)
+                                                <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan booking ini? Slot akan langsung dilepas.')">
+                                                    @csrf
+                                                    <button type="submit" class="px-3 py-1 rounded-lg border border-error/30 text-error hover:bg-error-container hover:text-on-error-container font-label-md text-label-md transition-all">Batal</button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     @elseif($booking->status == 'paid')
                                         <span class="text-caption text-on-surface-variant">Disetujui</span>
                                     @else

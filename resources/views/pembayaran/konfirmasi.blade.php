@@ -217,21 +217,31 @@
                     Submit Pembayaran
 
                 </button>
+            </form>
 
-                <p class="text-caption text-center text-on-surface-variant">
-                    <span class="material-symbols-outlined text-[14px] align-middle">
-                        lock
-                    </span>
-                    Pembayaran Aman & Terenkripsi
-                </p>
+            @if(!$booking->payment_proof)
+                <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini?')">
+                    @csrf
+                    <button
+                        type="submit"
+                        class="w-full mt-sm py-2 px-md border border-error/40 text-error hover:bg-error-container hover:text-on-error-container rounded-xl font-label-md transition-all text-center">
+                        Batalkan Pesanan Ini
+                    </button>
+                </form>
+            @endif
 
-            </div>
+            <p class="text-caption text-center text-on-surface-variant">
+                <span class="material-symbols-outlined text-[14px] align-middle">
+                    lock
+                </span>
+                Pembayaran Aman & Terenkripsi
+            </p>
 
         </div>
 
     </div>
 
-</form>
+</div>
 @endsection
 
 @push('scripts')

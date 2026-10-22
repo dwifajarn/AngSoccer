@@ -32,4 +32,18 @@ class Booking extends Model
     {
         return $this->belongsTo(Lapangan::class);
     }
+
+    public function scopeActiveReservation($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('status', 'paid')
+              ->orWhere(function ($pending) {
+                  $pending->where('status', 'pending')
+                          ->where(function ($sub) {
+                              $sub->whereNotNull('payment_proof')
+                                  ->orWhere('created_at', '>=', now()->subMinutes(30));
+                          });
+              });
+        });
+    }
 }

@@ -32,7 +32,7 @@ class FieldController extends Controller
     {
         $field = Lapangan::findOrFail($id);
         $bookings = \App\Models\Booking::where('lapangan_id', $id)
-            ->whereIn('status', ['paid', 'pending'])
+            ->activeReservation()
             ->where('date', '>=', today()->toDateString())
             ->get(['date', 'time', 'duration']);
 
@@ -42,7 +42,7 @@ class FieldController extends Controller
     public function getBookings(Request $request, $id)
     {
         $query = \App\Models\Booking::where('lapangan_id', $id)
-            ->whereIn('status', ['paid', 'pending']);
+            ->activeReservation();
 
         if ($request->filled('date')) {
             $query->whereDate('date', $request->date);

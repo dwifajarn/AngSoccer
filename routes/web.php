@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking-lapangan/{id}/bookings', [FieldController::class, 'getBookings'])->name('booking.slots');
     Route::post('/bookings', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/booking-history', [BookingController::class, 'history'])->name('bookings.history');
+    Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
     Route::get('/pembayaran/konfirmasi/{booking}', [PaymentController::class, 'showKonfirmasi'])->name('pembayaran.konfirmasi');
     Route::post('/pembayaran/konfirmasi/{booking}', [PaymentController::class, 'submitPayment'])->name('pembayaran.submit');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

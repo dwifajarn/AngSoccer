@@ -4,199 +4,249 @@
 
 @section('main')
     <!-- Header -->
-    <header class="flex justify-between items-end mb-xl">
+    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
-            <h2 class="font-headline-lg text-headline-lg text-on-background font-bold text-3xl">Dashboard</h2>
-            <p class="text-on-surface-variant font-body-md mt-1">Selamat datang kembali di panel manajemen AngSoccer.</p>
+            <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight font-headline">Dashboard Operasional</h1>
+            <p class="text-xs sm:text-sm text-gray-400 mt-1">Pantau performa lapangan, status pesanan, dan arus pendapatan AngSoccer.</p>
         </div>
-        <div class="flex gap-sm">
-            <button class="bg-surface-container-highest p-sm rounded-lg hover:scale-95 transition-transform">
-                <span class="material-symbols-outlined">notifications</span>
-            </button>
-            <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold overflow-hidden">
-                <span class="material-symbols-outlined">person</span>
-            </div>
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Sistem Live
+            </span>
         </div>
     </header>
 
-    <!-- Stats Row -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
-        <!-- Card 1 -->
-        <div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)] flex flex-col gap-sm border border-transparent hover:border-secondary transition-all">
-            <div class="flex justify-between items-start">
-                <div class="p-sm bg-secondary-container rounded-lg text-on-secondary-container">
-                    <span class="material-symbols-outlined">stadium</span>
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <!-- Card 1: Total Lapangan -->
+        <div class="bg-[#131914] border border-white/10 p-5 rounded-2xl shadow-xl hover:border-emerald-500/30 transition-all flex flex-col justify-between">
+            <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[22px]">stadium</span>
                 </div>
+                <span class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Unit Aktif</span>
             </div>
-            <p class="font-label-md text-label-md text-on-surface-variant">Total Lapangan</p>
-            <h3 class="font-headline-md text-headline-md text-on-surface font-bold text-2xl">{{ $totalFields }}</h3>
+            <div>
+                <span class="text-xs text-gray-400 font-medium">Total Lapangan</span>
+                <h3 class="text-2xl font-black text-white font-headline mt-0.5">{{ $totalFields }}</h3>
+            </div>
         </div>
-        <!-- Card 2 -->
-        <div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)] flex flex-col gap-sm border border-transparent hover:border-secondary transition-all">
-            <div class="flex justify-between items-start">
-                <div class="p-sm bg-primary-container rounded-lg text-on-primary-container">
-                    <span class="material-symbols-outlined">book_online</span>
+
+        <!-- Card 2: Total Booking -->
+        <div class="bg-[#131914] border border-white/10 p-5 rounded-2xl shadow-xl hover:border-emerald-500/30 transition-all flex flex-col justify-between">
+            <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[22px]">sports_soccer</span>
                 </div>
+                <span class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Akumulasi</span>
             </div>
-            <p class="font-label-md text-label-md text-on-surface-variant">Total Booking</p>
-            <h3 class="font-headline-md text-headline-md text-on-surface font-bold text-2xl">{{ $totalBookings }}</h3>
+            <div>
+                <span class="text-xs text-gray-400 font-medium">Total Booking</span>
+                <h3 class="text-2xl font-black text-white font-headline mt-0.5">{{ $totalBookings }}</h3>
+            </div>
         </div>
-        <!-- Card 3 -->
-        <div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)] flex flex-col gap-sm border border-transparent hover:border-secondary transition-all">
-            <div class="flex justify-between items-start">
-                <div class="p-sm bg-error-container rounded-lg text-on-error-container">
-                    <span class="material-symbols-outlined">pending_actions</span>
+
+        <!-- Card 3: Pending Payments -->
+        <div class="bg-[#131914] border border-white/10 p-5 rounded-2xl shadow-xl hover:border-amber-500/30 transition-all flex flex-col justify-between">
+            <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[22px]">pending_actions</span>
                 </div>
+                <span class="text-[10px] uppercase font-bold text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded-full tracking-wider">Perlu Tindakan</span>
             </div>
-            <p class="font-label-md text-label-md text-on-surface-variant">Pending Payments</p>
-            <h3 class="font-headline-md text-headline-md text-on-surface font-bold text-2xl text-error">{{ $pendingPayments }}</h3>
+            <div>
+                <span class="text-xs text-gray-400 font-medium">Menunggu Verifikasi</span>
+                <h3 class="text-2xl font-black text-amber-400 font-headline mt-0.5">{{ $pendingPayments }}</h3>
+            </div>
         </div>
-        <!-- Card 4 -->
-        <div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)] flex flex-col gap-sm border border-transparent hover:border-secondary transition-all">
-            <div class="flex justify-between items-start">
-                <div class="p-sm bg-secondary-fixed rounded-lg text-on-secondary-fixed">
-                    <span class="material-symbols-outlined">monetization_on</span>
+
+        <!-- Card 4: Total Revenue -->
+        <div class="bg-[#131914] border border-white/10 p-5 rounded-2xl shadow-xl hover:border-emerald-500/30 transition-all flex flex-col justify-between">
+            <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[22px]">monetization_on</span>
                 </div>
+                <span class="text-[10px] uppercase font-bold text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-full tracking-wider">Omset Lunas</span>
             </div>
-            <p class="font-label-md text-label-md text-on-surface-variant">Total Revenue</p>
-            <h3 class="font-headline-md text-headline-md text-on-surface font-bold text-2xl text-secondary">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h3>
+            <div>
+                <span class="text-xs text-gray-400 font-medium">Total Revenue</span>
+                <h3 class="text-xl sm:text-2xl font-black text-emerald-400 font-headline mt-0.5">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h3>
+            </div>
         </div>
     </div>
 
-    <!-- Middle Row: Charts -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-xl">
-        <!-- Revenue Trend -->
-        <div class="lg:col-span-2 bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)]">
-            <div class="flex justify-between items-center mb-xl">
-                <h4 class="font-headline-md text-headline-md text-on-surface font-bold">Revenue Growth</h4>
-                <select class="bg-surface-container-low border-none rounded-lg text-label-md font-label-md px-md py-xs focus:ring-secondary">
-                    <option>Last 7 Days</option>
-                    <option>Last 30 Days</option>
-                </select>
-            </div>
-            <div class="chart-container flex items-end gap-sm px-md h-48">
-                <!-- Fake Bar Chart Visualization -->
-                <div class="flex-grow flex items-end justify-between h-40 gap-xs">
-                    <div class="w-full bg-secondary-container/20 rounded-t-sm h-[40%] hover:bg-secondary transition-colors cursor-pointer group relative">
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-background text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">12M</div>
-                    </div>
-                    <div class="w-full bg-secondary-container/20 rounded-t-sm h-[55%] hover:bg-secondary transition-colors cursor-pointer group relative">
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-background text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">15M</div>
-                    </div>
-                    <div class="w-full bg-secondary-container/20 rounded-t-sm h-[45%] hover:bg-secondary transition-colors cursor-pointer group relative">
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-background text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">13M</div>
-                    </div>
-                    <div class="w-full bg-secondary-container rounded-t-sm h-[75%] hover:bg-secondary transition-colors cursor-pointer group relative">
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-background text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">22M</div>
-                    </div>
-                    <div class="w-full bg-secondary-container/20 rounded-t-sm h-[60%] hover:bg-secondary transition-colors cursor-pointer group relative">
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-background text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">18M</div>
-                    </div>
-                    <div class="w-full bg-secondary-container/20 rounded-t-sm h-[85%] hover:bg-secondary transition-colors cursor-pointer group relative">
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-background text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">26M</div>
-                    </div>
-                    <div class="w-full bg-primary-container rounded-t-sm h-[95%] hover:bg-secondary transition-colors cursor-pointer group relative">
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-background text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">30M</div>
-                    </div>
+    <!-- Middle Row: Analytics & Quick Schedule -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Revenue Bar Chart Preview -->
+        <div class="lg:col-span-2 bg-[#131914] border border-white/10 p-6 rounded-2xl shadow-xl">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-base font-bold text-white font-headline">Aktivitas & Estimasi Pertumbuhan</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">Ringkasan okupansi mingguan seluruh arena AngSoccer.</p>
                 </div>
+                <a href="{{ route('admin.revenue') }}" class="text-xs font-bold text-emerald-400 hover:underline flex items-center gap-1">
+                    Detail Laporan <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </a>
             </div>
-            <div class="flex justify-between mt-md px-md text-caption text-on-surface-variant">
-                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+
+            <div class="h-44 flex items-end gap-3 pt-6 px-2">
+                <div class="flex-1 flex flex-col items-center gap-2 group">
+                    <div class="w-full bg-white/5 rounded-t-lg h-20 group-hover:bg-emerald-500/40 transition-all relative">
+                        <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">40%</span>
+                    </div>
+                    <span class="text-[11px] text-gray-500 font-semibold">Sen</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-2 group">
+                    <div class="w-full bg-white/5 rounded-t-lg h-28 group-hover:bg-emerald-500/40 transition-all relative">
+                        <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">60%</span>
+                    </div>
+                    <span class="text-[11px] text-gray-500 font-semibold">Sel</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-2 group">
+                    <div class="w-full bg-white/5 rounded-t-lg h-24 group-hover:bg-emerald-500/40 transition-all relative">
+                        <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">50%</span>
+                    </div>
+                    <span class="text-[11px] text-gray-500 font-semibold">Rab</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-2 group">
+                    <div class="w-full bg-white/5 rounded-t-lg h-32 group-hover:bg-emerald-500/40 transition-all relative">
+                        <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">70%</span>
+                    </div>
+                    <span class="text-[11px] text-gray-500 font-semibold">Kam</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-2 group">
+                    <div class="w-full bg-white/10 rounded-t-lg h-36 group-hover:bg-emerald-500/40 transition-all relative">
+                        <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">80%</span>
+                    </div>
+                    <span class="text-[11px] text-gray-400 font-semibold">Jum</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-2 group">
+                    <div class="w-full bg-emerald-500/30 rounded-t-lg h-40 group-hover:bg-emerald-400 transition-all relative">
+                        <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] font-bold text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">95%</span>
+                    </div>
+                    <span class="text-[11px] text-emerald-400 font-bold">Sab</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-2 group">
+                    <div class="w-full bg-emerald-500/30 rounded-t-lg h-40 group-hover:bg-emerald-400 transition-all relative">
+                        <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] font-bold text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">90%</span>
+                    </div>
+                    <span class="text-[11px] text-emerald-400 font-bold">Min</span>
+                </div>
             </div>
         </div>
-        <!-- Booking Distribution -->
-        <div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)] flex flex-col">
-            <h4 class="font-headline-md text-headline-md text-on-surface mb-xl font-bold">Field Usage</h4>
-            <div class="flex-grow flex flex-col justify-center gap-md">
-                <div class="flex flex-col gap-xs">
-                    <div class="flex justify-between text-label-md">
-                        <span>Main Pitch A (Soccer)</span>
-                        <span>82%</span>
-                    </div>
-                    <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
-                        <div class="h-full bg-secondary w-[82%] rounded-full"></div>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-xs">
-                    <div class="flex justify-between text-label-md">
-                        <span>San Siro (Futsal)</span>
-                        <span>64%</span>
-                    </div>
-                    <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
-                        <div class="h-full bg-secondary-fixed-dim w-[64%] rounded-full"></div>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-xs">
-                    <div class="flex justify-between text-label-md">
-                        <span>Mini Wembley</span>
-                        <span>41%</span>
-                    </div>
-                    <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
-                        <div class="h-full bg-primary-fixed-dim w-[41%] rounded-full"></div>
-                    </div>
+
+        <!-- Quick Actions & Operasional -->
+        <div class="bg-[#131914] border border-white/10 p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+            <div>
+                <h3 class="text-base font-bold text-white font-headline">Aksi Cepat Admin</h3>
+                <p class="text-xs text-gray-400 mt-0.5">Navigasi langsung ke modul manajemen harian.</p>
+
+                <div class="space-y-3 mt-5">
+                    <a href="{{ route('admin.lapangan.index') }}" class="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/5 hover:border-emerald-500/30 hover:bg-white/[0.06] transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-emerald-400 text-[20px]">add_circle</span>
+                            <span class="text-xs font-bold text-white">Kelola & Tambah Lapangan</span>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-500 text-[16px]">chevron_right</span>
+                    </a>
+
+                    <a href="{{ route('admin.payments.index') }}" class="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/5 hover:border-emerald-500/30 hover:bg-white/[0.06] transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-amber-400 text-[20px]">receipt_long</span>
+                            <span class="text-xs font-bold text-white">Verifikasi Bukti Transfer</span>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-500 text-[16px]">chevron_right</span>
+                    </a>
+
+                    <a href="{{ route('admin.schedule') }}" class="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/5 hover:border-emerald-500/30 hover:bg-white/[0.06] transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-blue-400 text-[20px]">calendar_view_week</span>
+                            <span class="text-xs font-bold text-white">Cek Matriks Okupansi</span>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-500 text-[16px]">chevron_right</span>
+                    </a>
                 </div>
             </div>
-            <a href="{{ route('admin.revenue') }}" class="mt-xl w-full border border-outline py-sm rounded-lg font-label-md text-secondary hover:bg-secondary-container/10 transition-colors text-center inline-block">
-                View Full Analytics
+
+            <div class="pt-5 border-t border-white/10 mt-5">
+                <span class="text-[11px] text-gray-400">Pusat kendali otomatisasi jadwal & verifikasi keuangan.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Row: Recent Bookings Table -->
+    <div class="bg-[#131914] border border-white/10 rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-white/10">
+            <div>
+                <h3 class="text-base font-bold text-white font-headline">Pesanan Terbaru</h3>
+                <p class="text-xs text-gray-400 mt-0.5">Daftar transaksi booking yang baru masuk ke sistem.</p>
+            </div>
+            <a href="{{ route('admin.payments.index') }}" class="text-xs font-bold text-emerald-400 hover:underline">
+                Kelola Semua Pesanan →
             </a>
         </div>
-    </div>
 
-    <!-- Bottom Row: Recent Bookings -->
-    <div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)] overflow-hidden">
-        <div class="p-lg flex justify-between items-center border-b border-outline-variant">
-            <h4 class="font-headline-md text-headline-md text-on-surface font-bold">Recent Bookings</h4>
-        </div>
         <div class="overflow-x-auto">
             @if($recentBookings->count() > 0)
-                <table class="w-full text-left">
-                    <thead class="bg-surface-container-low text-on-surface-variant font-label-md text-label-md">
-                        <tr>
-                            <th class="px-lg py-md">Booking ID</th>
-                            <th class="px-lg py-md">Customer</th>
-                            <th class="px-lg py-md">Field</th>
-                            <th class="px-lg py-md">Date &amp; Time</th>
-                            <th class="px-lg py-md">Status</th>
-                            <th class="px-lg py-md text-right">Action</th>
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-black/30 text-gray-400 font-bold uppercase tracking-wider border-b border-white/10">
+                            <th class="py-3.5 px-6">Kode Booking</th>
+                            <th class="py-3.5 px-6">Pemesan</th>
+                            <th class="py-3.5 px-6">Lapangan</th>
+                            <th class="py-3.5 px-6">Jadwal Main</th>
+                            <th class="py-3.5 px-6">Status</th>
+                            <th class="py-3.5 px-6 text-right">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-outline-variant">
+                    <tbody class="divide-y divide-white/5">
                         @foreach($recentBookings as $booking)
-                            <tr class="hover:bg-surface-container-low transition-colors">
-                                <td class="px-lg py-md font-mono text-body-md text-secondary">#{{ $booking->booking_code }}</td>
-                                <td class="px-lg py-md">
-                                    <div class="flex items-center gap-sm">
-                                        <div class="w-8 h-8 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center text-[10px] font-bold">
+                            <tr class="hover:bg-white/[0.02] transition-colors">
+                                <td class="py-4 px-6 font-mono font-bold text-emerald-400">
+                                    #{{ $booking->booking_code }}
+                                </td>
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-[10px]">
                                             {{ strtoupper(substr($booking->user->name, 0, 2)) }}
                                         </div>
-                                        <span class="font-label-md">{{ $booking->user->name }}</span>
+                                        <span class="font-semibold text-white">{{ $booking->user->name }}</span>
                                     </div>
                                 </td>
-                                <td class="px-lg py-md font-body-md">{{ $booking->lapangan->name }}</td>
-                                <td class="px-lg py-md text-body-md">{{ date('d M Y', strtotime($booking->date)) }}, {{ $booking->time }}</td>
-                                <td class="px-lg py-md">
-                                    @if($booking->status == 'paid')
-                                        <span class="bg-secondary-container/50 text-on-secondary-container px-2 py-1 rounded-full text-caption font-bold">Confirmed</span>
-                                    @elseif($booking->status == 'pending')
-                                        <span class="bg-error-container/50 text-error px-2 py-1 rounded-full text-caption font-bold">Pending</span>
+                                <td class="py-4 px-6 text-gray-300">
+                                    {{ $booking->lapangan->name }}
+                                </td>
+                                <td class="py-4 px-6 text-gray-400">
+                                    {{ date('d M Y', strtotime($booking->date)) }} • <span class="text-white">{{ $booking->time }}</span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    @if($booking->status === 'paid')
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                                            Paid
+                                        </span>
+                                    @elseif($booking->status === 'pending')
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                                            Pending
+                                        </span>
                                     @else
-                                        <span class="bg-surface-variant text-on-surface-variant px-2 py-1 rounded-full text-caption font-bold">Cancelled</span>
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-500/10 border border-red-500/30 text-red-400">
+                                            Cancelled
+                                        </span>
                                     @endif
                                 </td>
-                                <td class="px-lg py-md text-right">
-                                    @if($booking->status == 'pending')
-                                        <a href="{{ route('admin.payments.index') }}" class="text-secondary hover:underline text-sm font-bold">Review</a>
-                                    @else
-                                        <button class="text-on-surface-variant hover:text-secondary transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
-                                    @endif
+                                <td class="py-4 px-6 text-right">
+                                    <a href="{{ route('admin.payments.index') }}" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-400 font-bold transition-all inline-block">
+                                        Periksa
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             @else
-                <div class="text-center py-xl">
-                    <p class="text-on-surface-variant">Belum ada pemesanan terbaru.</p>
+                <div class="p-8 text-center text-gray-500 text-xs">
+                    Belum ada transaksi pemesanan terbaru.
                 </div>
             @endif
         </div>

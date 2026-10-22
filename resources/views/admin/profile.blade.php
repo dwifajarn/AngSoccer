@@ -3,99 +3,126 @@
 @section('title', 'Profil Admin - AngSoccer')
 
 @section('main')
-    <header class="mb-10">
-        <h2 class="text-3xl font-bold text-black tracking-tight font-headline">Profil Admin</h2>
-        <p class="text-black mt-1 font-body">Kelola informasi pribadi dan pengaturan keamanan akun Anda.</p>
+    <header class="mb-8">
+        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight font-headline">Profil Akun Admin</h1>
+        <p class="text-xs sm:text-sm text-gray-400 mt-1">Kelola informasi identitas akun dan keamanan kata sandi Anda.</p>
     </header>
 
     @if(session('success'))
-        <div class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-800 text-sm shadow-sm">
-            <span class="material-symbols-outlined text-emerald-600 text-[22px]">check_circle</span>
+        <div class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-400 text-sm shadow-sm">
+            <span class="material-symbols-outlined text-emerald-400 text-[22px]">check_circle</span>
             <span class="font-medium">{{ session('success') }}</span>
         </div>
     @endif
 
-    <div class="grid grid-cols-12 gap-lg">
+    <div class="grid grid-cols-12 gap-6">
+        <!-- Left Side: Profile Summary Card -->
         <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
-            <div class="bg-white rounded-xl p-8 shadow-[0px_4px_20px_rgba(26,28,30,0.08)] flex flex-col items-center text-center relative overflow-hidden border border-surface-container-high">
-                <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#000000 1px, transparent 1px); background-size: 20px 20px;"></div>
-                <div class="relative mb-6">
-                    <img class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md shadow-slate-200" src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}">
+            <div class="bg-[#131914] border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col items-center text-center relative overflow-hidden">
+                <div class="relative mb-4">
+                    <img class="w-28 h-28 rounded-full object-cover border-2 border-emerald-500/40 shadow-xl" src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}">
                 </div>
-                <h3 class="text-2xl font-bold text-black font-headline">{{ $user->name }}</h3>
-                <span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mt-2 font-label">{{ strtoupper($user->role) }}</span>
-                
-                <div class="w-full mt-8 pt-8 border-t border-surface-container-high flex flex-col gap-4">
-                    <div class="flex items-center gap-4 text-left">
-                        <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
-                            <span class="material-symbols-outlined">mail</span>
+                <h3 class="text-xl font-bold text-white font-headline">{{ $user->name }}</h3>
+                <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest mt-2">
+                    {{ strtoupper($user->role) }}
+                </span>
+
+                <div class="w-full mt-6 pt-6 border-t border-white/10 flex flex-col gap-3 text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">mail</span>
                         </div>
-                        <div>
-                            <p class="text-xs text-on-surface-variant font-label">Email</p>
-                            <p class="font-medium text-black font-body">{{ $user->email }}</p>
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email</p>
+                            <p class="text-xs font-semibold text-white truncate">{{ $user->email }}</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4 text-left">
-                        <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
-                            <span class="material-symbols-outlined">call</span>
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">call</span>
                         </div>
-                        <div>
-                            <p class="text-xs text-on-surface-variant font-label">Telepon</p>
-                            <p class="font-medium text-black font-body">{{ $user->phone ?? '-' }}</p>
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">No. Telepon / WA</p>
+                            <p class="text-xs font-semibold text-white">{{ $user->phone ?? '-' }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Right Side: Edit Form Card -->
         <div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
-            <section class="bg-white rounded-xl p-8 shadow-[0px_4px_20px_rgba(26,28,30,0.08)] border border-surface-container-high">
-                <div class="flex items-center gap-3 mb-8">
-                    <span class="material-symbols-outlined text-secondary">badge</span>
-                    <h3 class="text-xl font-bold text-black font-headline">Informasi Akun</h3>
+            <section class="bg-[#131914] border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl">
+                <div class="flex items-center gap-2.5 mb-6 border-b border-white/10 pb-4">
+                    <span class="material-symbols-outlined text-emerald-400 text-[22px]">badge</span>
+                    <h2 class="text-base font-bold text-white font-headline">Informasi Akun</h2>
                 </div>
 
-                <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
-                    <div class="flex flex-col gap-2">
-                        <label class="text-sm font-label text-black">Nama Lengkap</label>
-                        <input name="name" class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-secondary transition-all text-black" type="text" value="{{ old('name', $user->name) }}" required>
-                        @error('name')
-                            <p class="text-error text-caption font-caption">{{ $message }}</p>
-                        @enderror
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Nama Lengkap</label>
+                            <input name="name" class="w-full px-3.5 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500" type="text" value="{{ old('name', $user->name) }}" required>
+                            @error('name')
+                                <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Role Akses</label>
+                            <input class="w-full px-3.5 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-gray-500 cursor-not-allowed" disabled type="text" value="{{ ucfirst($user->role) }}">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Email (Akun Utama)</label>
+                            <input name="email" class="w-full px-3.5 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500" type="email" value="{{ old('email', $user->email) }}" required>
+                            @error('email')
+                                <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Nomor HP</label>
+                            <input name="phone" class="w-full px-3.5 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500" type="text" value="{{ old('phone', $user->phone) }}" placeholder="08xxxxxxxxxx">
+                            @error('phone')
+                                <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="flex flex-col gap-2">
-                        <label class="text-sm font-label text-black">Role Akses</label>
-                        <input class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 opacity-60 cursor-not-allowed text-black" disabled type="text" value="{{ ucfirst($user->role) }}">
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <label class="text-sm font-label text-black">Alamat Email</label>
-                        <input name="email" class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-secondary transition-all text-black" type="email" value="{{ old('email', $user->email) }}" required>
-                        @error('email')
-                            <p class="text-error text-caption font-caption">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <label class="text-sm font-label text-black">Nomor Telepon</label>
-                        <input name="phone" class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-secondary transition-all text-black" type="tel" value="{{ old('phone', $user->phone) }}" required>
-                        @error('phone')
-                            <p class="text-error text-caption font-caption">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="col-span-full flex flex-col gap-2">
-                        <label class="text-sm font-label text-black">Foto Profil</label>
-                        <input name="avatar" type="file" class="w-full bg-surface-container-low border border-outline-variant rounded-md px-4 py-2 text-black">
+
+                    <div class="space-y-1.5 pt-2">
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Ganti Foto Profil</label>
+                        <input name="avatar" type="file" class="w-full px-3.5 py-2 bg-black/40 border border-white/10 rounded-xl text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-500/20 file:text-emerald-400 hover:file:bg-emerald-500/30">
                         @error('avatar')
-                            <p class="text-error text-caption font-caption">{{ $message }}</p>
+                            <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="col-span-full flex flex-col gap-2">
-                        <label class="text-sm font-label text-black">Alamat Kantor</label>
-                        <textarea class="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-secondary transition-all text-black" rows="3">Jl. Atletik No. 45, Kompleks Olahraga Senayan, Jakarta Pusat</textarea>
+
+                    <div class="pt-6 border-t border-white/10 mt-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-amber-400 text-[20px]">lock_reset</span>
+                            <h3 class="text-sm font-bold text-white font-headline">Ganti Kata Sandi (Opsional)</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Kata Sandi Baru</label>
+                                <input name="password" class="w-full px-3.5 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500" type="password" placeholder="Kosongkan jika tidak diubah">
+                                @error('password')
+                                    <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Konfirmasi Kata Sandi Baru</label>
+                                <input name="password_confirmation" class="w-full px-3.5 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500" type="password" placeholder="Ulangi kata sandi baru">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-span-full">
-                        <button type="submit" class="bg-secondary text-on-secondary text-white px-xl py-sm rounded-lg font-bold font-label-md text-label-md transition-all active:scale-95 hover:bg-secondary/90">
-                            Simpan Perubahan
+
+                    <div class="pt-4 flex justify-end">
+                        <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black font-extrabold rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition-all flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[16px]">save</span>
+                            <span>Simpan Perubahan</span>
                         </button>
                     </div>
                 </form>

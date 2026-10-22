@@ -7,6 +7,8 @@ use App\Models\Booking;
 use App\Models\Lapangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class BookingController extends Controller
 {
@@ -40,45 +42,50 @@ class BookingController extends Controller
             return back()->withErrors(['time' => 'Waktu pemesanan sudah lewat.'])->withInput();
         }
 
-        // Check for overlapping bookings
-        $overlapping = Booking::where('lapangan_id', $request->lapangan_id)
-            ->whereDate('date', $requestedDate)
-            ->activeReservation()
-            ->get()
-            ->filter(function($b) use ($requestedStartHour, $requestedEndHour) {
-                $parts = explode(' - ', $b->time);
-                if (count($parts) === 2) {
+        // ponytail: pessimistic row lock on venue ceiling; add when schema migration to integer start_hour/end_hour range columns is requested
+        $booking = DB::transaction(function () use ($request, $requestedDate, $requestedStartHour, $requestedDuration, $requestedEndHour) {
+            $lapangan = Lapangan::where('id', $request->lapangan_id)->lockForUpdate()->firstOrFail();
+
+            // Check for overlapping bookings inside transaction
+            $hasConflict = Booking::where('lapangan_id', $lapangan->id)
+                ->whereDate('date', $requestedDate)
+                ->activeReservation()
+                ->get()
+                ->contains(function ($b) use ($requestedStartHour, $requestedEndHour) {
+                    $parts = explode(' - ', $b->time);
+                    if (count($parts) !== 2) {
+                        return false;
+                    }
                     $start = intval(explode(':', $parts[0])[0]);
                     $end = intval(explode(':', $parts[1])[0]);
                     return max($requestedStartHour, $start) < min($requestedEndHour, $end);
-                }
-                return false;
-            });
+                });
 
-        if ($overlapping->isNotEmpty()) {
-            return back()->withErrors(['time' => 'Waktu yang Anda pilih bentrok dengan pesanan lain.'])->withInput();
-        }
+            if ($hasConflict) {
+                throw ValidationException::withMessages([
+                    'time' => 'Waktu yang Anda pilih bentrok dengan pesanan lain.',
+                ]);
+            }
 
-        $lapangan = Lapangan::findOrFail($request->lapangan_id);
-        $totalPrice = $lapangan->price_per_hour * $request->duration;
-        $bookingCode = 'BK-' . rand(1000, 9999);
-
-        // Ensure unique code
-        while (Booking::where('booking_code', $bookingCode)->exists()) {
+            $totalPrice = $lapangan->price_per_hour * $requestedDuration;
             $bookingCode = 'BK-' . rand(1000, 9999);
-        }
 
-        $booking = Booking::create([
-            'booking_code' => $bookingCode,
-            'user_id' => Auth::id(),
-            'lapangan_id' => $lapangan->id,
-            'date' => $request->date,
-            'time' => $request->time . ' - ' . ($requestedEndHour < 10 ? '0' . $requestedEndHour : $requestedEndHour) . ':00',
-            'duration' => $request->duration,
-            'total_price' => $totalPrice,
-            'status' => 'pending',
-            'notes' => $request->notes,
-        ]);
+            while (Booking::where('booking_code', $bookingCode)->exists()) {
+                $bookingCode = 'BK-' . rand(1000, 9999);
+            }
+
+            return Booking::create([
+                'booking_code' => $bookingCode,
+                'user_id' => Auth::id(),
+                'lapangan_id' => $lapangan->id,
+                'date' => $requestedDate,
+                'time' => sprintf('%02d:00 - %02d:00', $requestedStartHour, $requestedEndHour),
+                'duration' => $requestedDuration,
+                'total_price' => $totalPrice,
+                'status' => 'pending',
+                'notes' => $request->notes,
+            ]);
+        });
 
         return redirect()->route('pembayaran.konfirmasi', $booking->id)
             ->with('success', 'Booking berhasil dibuat! Selesaikan pembayaran Anda.');

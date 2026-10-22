@@ -250,9 +250,12 @@
                             <h3 class="text-xl font-bold text-white font-headline">{{ $field->name }}</h3>
                             <p class="text-gray-400 text-xs mt-2 line-clamp-2">{{ $field->description }}</p>
                             
-                            @if($field->facilities)
+                            @php
+                                $facilitiesList = is_array($field->facilities) ? $field->facilities : array_filter(array_map('trim', explode(',', (string)$field->facilities)));
+                            @endphp
+                            @if(!empty($facilitiesList))
                                 <div class="flex flex-wrap gap-1.5 mt-4">
-                                    @foreach(array_slice($field->facilities, 0, 3) as $fac)
+                                    @foreach(array_slice($facilitiesList, 0, 3) as $fac)
                                         <span class="text-[11px] font-medium px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-gray-300">
                                             {{ $fac }}
                                         </span>

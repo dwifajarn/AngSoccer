@@ -1,141 +1,105 @@
 @extends('layouts.guest')
 
-@section('title', 'Forgot Password - AngSoccer')
+@section('title', 'Lupa Password | AngSoccer')
 
-@section('body-class', 'bg-background font-body-md text-on-background min-h-screen flex flex-col items-center
-    justify-center p-md bg-pattern')
+@section('body-class', 'bg-[#0a0d0a] text-gray-200 min-h-screen flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-x-hidden selection:bg-emerald-500 selection:text-black')
 
-    @push('styles')
-        <style>
-            .success-animation {
-                animation: slideUp 0.5s ease-out forwards;
-            }
+@push('styles')
+    <style>
+        .auth-mesh {
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(5, 150, 105, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.04) 0%, transparent 60%);
+        }
+        .pitch-grid {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+@endpush
 
-            @keyframes slideUp {
-                from {
-                    transform: translateY(20px);
-                    opacity: 0;
-                }
+@section('background')
+    <div class="fixed inset-0 auth-mesh pitch-grid pointer-events-none"></div>
+@endsection
 
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
-                }
-            }
-
-            .bg-pattern {
-                background-color: #f9f9fc;
-                background-image: radial-gradient(#2d5a27 0.5px, transparent 0.5px);
-                background-size: 24px 24px;
-            }
-        </style>
-    @endpush
+@section('main-class', 'w-full max-w-[440px] flex flex-col items-center mx-auto z-10 my-auto')
 
 @section('main')
-    <div class="flex flex-col items-center mb-xl">
-        @include('partials.logo', ['class' => 'w-24 h-24 mb-md'])
-        <h1 class="font-headline-md text-headline-md text-primary tracking-tight">AngSoccer</h1>
+    <!-- Top Brand & Back to Home -->
+    <div class="w-full flex justify-between items-center mb-6">
+        <a href="/" class="flex items-center gap-2 group">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-black font-extrabold shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+                <span class="material-symbols-outlined text-[20px]">sports_soccer</span>
+            </div>
+            <span class="text-xl font-black tracking-tight text-white font-headline">Ang<span class="text-emerald-400">Soccer</span></span>
+        </a>
+        <a href="{{ route('login') }}" class="text-xs font-semibold text-gray-400 hover:text-emerald-400 flex items-center gap-1 transition-colors">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Masuk</span>
+        </a>
     </div>
 
-    <div class="bg-surface-container-lowest p-xl rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)] transition-all duration-300"
-        id="request-card">
-        <div class="mb-lg">
-            <h2 class="font-headline-md text-headline-md text-on-surface mb-xs">Forgot Password?</h2>
-            <p class="font-body-md text-on-surface-variant">No worries, we'll send you reset instructions to your inbox.</p>
+    <!-- Forgot Password Card -->
+    <div class="w-full bg-[#131914]/90 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl p-6 sm:p-8 relative">
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
+            <span class="material-symbols-outlined text-[26px]">lock_reset</span>
+        </div>
+
+        <div class="mb-6">
+            <h1 class="text-2xl font-black text-white tracking-tight">Lupa Kata Sandi?</h1>
+            <p class="text-xs sm:text-sm text-gray-400 mt-1">Jangan khawatir, masukkan email terdaftar Anda untuk menerima tautan pemulihan.</p>
         </div>
 
         @if (session('status'))
-            <div class="mb-lg p-md bg-secondary-container text-on-secondary-container rounded-lg font-body-md">
-                {{ session('status') }}
+            <div class="mb-5 p-3.5 bg-emerald-500/15 border border-emerald-500/30 rounded-xl flex items-start gap-2.5 text-emerald-300 text-xs leading-relaxed animate-in fade-in duration-200">
+                <span class="material-symbols-outlined text-emerald-400 text-[18px] shrink-0 mt-0.5">check_circle</span>
+                <div>
+                    <p class="font-bold">Permintaan Terkirim</p>
+                    <p class="mt-0.5 opacity-90">{{ session('status') }}</p>
+                </div>
             </div>
         @endif
 
-        <form action="{{ route('password.email') }}" class="space-y-lg" id="forgot-password-form" method="POST">
+        <form action="{{ route('password.email') }}" class="space-y-4" id="forgotPasswordForm" method="POST">
             @csrf
-            <div class="space-y-xs">
-                <label class="font-label-md text-label-md text-on-surface" for="email">Email Address</label>
-                <div class="relative">
-                    <span
-                        class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant">mail</span>
+
+            <!-- Email Input -->
+            <div class="space-y-1.5">
+                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider" for="email">Alamat Email</label>
+                <div class="relative group">
+                    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-400 transition-colors text-[20px]">mail</span>
                     <input
-                        class="w-full pl-11 pr-md py-3 bg-surface-container-lowest border border-outline/20 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-on-surface placeholder:text-outline @error('email') border-error @enderror"
+                        class="w-full pl-10 pr-4 py-3 bg-black/40 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all @error('email') border-red-500 @enderror"
                         id="email" name="email" type="email" value="{{ old('email') }}"
-                        placeholder="Enter your email" required autofocus>
+                        placeholder="nama@email.com" required autofocus>
                 </div>
                 @error('email')
-                    <p class="text-error text-caption font-caption">{{ $message }}</p>
+                    <p class="text-red-400 text-xs flex items-center gap-1 mt-1">
+                        <span class="material-symbols-outlined text-[14px]">error</span>
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
+
+            <!-- Submit Button -->
             <button
-                class="w-full bg-secondary hover:bg-secondary-container hover:text-on-secondary-container text-on-secondary font-label-md text-label-md py-4 rounded-lg shadow-sm transition-all active:scale-[0.98] flex items-center justify-center gap-sm"
+                class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black font-extrabold py-3.5 rounded-xl shadow-lg shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 mt-2"
                 type="submit">
-                Send Reset Link
-                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                <span>Kirim Tautan Reset</span>
+                <span class="material-symbols-outlined text-[18px]">send</span>
             </button>
         </form>
 
-        <div class="mt-xl pt-lg border-t border-outline-variant flex justify-center">
-            <a class="font-label-md text-label-md text-primary flex items-center gap-xs hover:underline transition-all"
+        <!-- Back to Login -->
+        <div class="mt-6 pt-5 border-t border-white/10 text-center">
+            <a class="text-xs font-bold text-gray-400 hover:text-emerald-400 flex items-center justify-center gap-1.5 transition-colors"
                 href="{{ route('login') }}">
-                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                Back to Login
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                <span>Kembali ke Halaman Masuk</span>
             </a>
         </div>
     </div>
-
-    <div class="hidden bg-surface-container-lowest p-xl rounded-xl shadow-[0px_4px_20px_rgba(26,28,30,0.08)] success-animation"
-        id="success-card">
-        <div class="flex flex-col items-center text-center">
-            <div
-                class="w-16 h-16 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center mb-lg">
-                <span class="material-symbols-outlined text-[32px]"
-                    style="font-variation-settings: 'FILL' 1;">check_circle</span>
-            </div>
-            <h2 class="font-headline-md text-headline-md text-on-surface mb-xs">Check your email</h2>
-            <p class="font-body-md text-on-surface-variant mb-xl">
-                We've sent a password reset link to <span class="font-semibold text-on-surface" id="display-email"></span>
-            </p>
-            <div class="w-full space-y-md">
-                <button
-                    class="w-full bg-secondary text-on-secondary font-label-md text-label-md py-4 rounded-lg shadow-sm transition-all hover:opacity-90 active:scale-[0.98]"
-                    type="button" onclick="location.reload()">
-                    Open Email App
-                </button>
-                <button
-                    class="w-full bg-transparent text-on-surface-variant font-label-md text-label-md py-3 rounded-lg hover:bg-surface-container transition-all"
-                    type="button" onclick="resetView()">
-                    Didn't receive the email? <span class="text-secondary font-bold">Click to resubmit</span>
-                </button>
-            </div>
-            <div class="mt-xl pt-lg border-t border-outline-variant w-full flex justify-center">
-                <a class="font-label-md text-label-md text-primary flex items-center gap-xs hover:underline transition-all"
-                    href="{{ route('login') }}">
-                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                    Back to Login
-                </a>
-            </div>
-        </div>
-    </div>
 @endsection
-
-@section('footer')
-    <p class="text-center mt-xl font-caption text-caption text-on-surface-variant w-full max-w-[440px]">
-        Trouble with your account? <a class="text-secondary underline" href="#">Contact Support</a>
-    </p>
-@endsection
-
-@push('scripts')
-    <script>
-        function resetView() {
-            const requestCard = document.getElementById('request-card');
-            const successCard = document.getElementById('success-card');
-
-            successCard.classList.add('opacity-0');
-            setTimeout(() => {
-                successCard.classList.add('hidden');
-                successCard.classList.remove('opacity-0');
-                requestCard.classList.remove('hidden', 'opacity-0', 'scale-95');
-            }, 300);
-        }
-    </script>
-@endpush

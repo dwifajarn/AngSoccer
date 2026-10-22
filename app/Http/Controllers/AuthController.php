@@ -85,6 +85,15 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        return back()->with('status', 'Instruksi pemulihan kata sandi telah dikirimkan ke email Anda.');
+    }
+
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();

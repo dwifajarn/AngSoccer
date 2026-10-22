@@ -30,17 +30,24 @@ class AuthController extends Controller
 
         $remember = $request->has('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-
-            return Auth::user()->isAdmin()
-                ? redirect()->intended(route('admin.dashboard'))
-                : redirect()->intended(route('fields.index'));
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Email ini belum terdaftar. Silakan periksa kembali atau buat akun baru.',
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
-        ])->onlyInput('email');
+        if (!Auth::attempt($credentials, $remember)) {
+            return back()->withErrors([
+                'password' => 'Kata sandi yang Anda masukkan salah. Silakan coba lagi atau gunakan Lupa Password.',
+            ])->onlyInput('email');
+        }
+
+        $request->session()->regenerate();
+
+        return Auth::user()->isAdmin()
+            ? redirect()->intended(route('admin.dashboard'))
+            : redirect()->intended(route('fields.index'));
     }
 
     public function showRegister()

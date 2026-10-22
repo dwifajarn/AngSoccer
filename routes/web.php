@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\User\FieldController;
 use App\Http\Controllers\User\BookingController;
 use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\DuitkuPaymentController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\LapanganController as AdminLapanganController;
@@ -16,6 +17,10 @@ Route::get('/', function () {
     $featuredFields = \App\Models\Lapangan::where('status', 'active')->take(3)->get();
     return view('landingpage', compact('featuredFields'));
 });
+
+// Duitku Webhook Callback & Return (Public)
+Route::post('/payment/duitku/callback', [DuitkuPaymentController::class, 'callback'])->name('duitku.callback');
+Route::get('/payment/duitku/return', [DuitkuPaymentController::class, 'returnPage'])->name('duitku.return');
 
 // Guest Auth Routes
 Route::middleware('guest')->group(function () {
@@ -42,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
     Route::get('/pembayaran/konfirmasi/{booking}', [PaymentController::class, 'showKonfirmasi'])->name('pembayaran.konfirmasi');
     Route::post('/pembayaran/konfirmasi/{booking}', [PaymentController::class, 'submitPayment'])->name('pembayaran.submit');
+    Route::post('/pembayaran/duitku/checkout/{booking}', [DuitkuPaymentController::class, 'checkout'])->name('duitku.checkout');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 

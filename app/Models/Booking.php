@@ -19,6 +19,9 @@ class Booking extends Model
         'duration',
         'total_price',
         'status',
+        'payment_method',
+        'payment_url',
+        'duitku_reference',
         'payment_proof',
         'notes',
     ];

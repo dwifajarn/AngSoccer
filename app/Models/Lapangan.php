@@ -17,6 +17,7 @@ class Lapangan extends Model
         'price_per_hour',
         'location',
         'description',
+        'facilities',
         'image_url',
         'rating',
         'status',

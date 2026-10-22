@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -81,5 +83,38 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (\Throwable $e) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Gagal login via Google: ' . $e->getMessage(),
+            ]);
+        }
+
+        // ponytail: random 32-char password ceiling until optional password reset or oauth-only accounts are added
+        $user = User::firstOrCreate(
+            ['email' => $googleUser->getEmail()],
+            [
+                'name' => $googleUser->getName() ?? 'Google User',
+                'password' => Hash::make(Str::random(32)),
+                'role' => 'user',
+            ]
+        );
+
+        Auth::login($user, true);
+        request()->session()->regenerate();
+
+        return $user->isAdmin()
+            ? redirect()->intended(route('admin.dashboard'))
+            : redirect()->intended(route('fields.index'));
     }
 }

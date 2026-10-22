@@ -30,8 +30,12 @@ class DashboardController extends Controller
         ));
     }
 
-    public function revenue()
+    public function revenue(Request $request)
     {
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        $status = $request->query('status');
+
         $dailyRevenue = Booking::where('status', 'paid')
             ->whereDate('date', today())
             ->sum('total_price');
@@ -45,16 +49,80 @@ class DashboardController extends Controller
             ->whereYear('date', now()->year)
             ->sum('total_price');
 
-        $transactions = Booking::with(['user', 'lapangan'])
-            ->orderBy('date', 'desc')
-            ->paginate(10);
+        $query = Booking::with(['user', 'lapangan'])->orderBy('date', 'desc');
+
+        if ($startDate) {
+            $query->whereDate('date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('date', '<=', $endDate);
+        }
+        if ($status && in_array($status, ['paid', 'pending', 'cancelled'])) {
+            $query->where('status', $status);
+        }
+
+        $filteredRevenue = (clone $query)->where('status', 'paid')->sum('total_price');
+        $transactions = $query->paginate(10)->withQueryString();
 
         return view('admin.revenue', compact(
             'dailyRevenue',
             'weeklyRevenue',
             'monthlyRevenue',
             'annualRevenue',
-            'transactions'
+            'filteredRevenue',
+            'transactions',
+            'startDate',
+            'endDate',
+            'status'
         ));
+    }
+
+    public function exportRevenueCsv(Request $request)
+    {
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        $status = $request->query('status');
+
+        $query = Booking::with(['user', 'lapangan'])->orderBy('date', 'desc');
+
+        if ($startDate) {
+            $query->whereDate('date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('date', '<=', $endDate);
+        }
+        if ($status && in_array($status, ['paid', 'pending', 'cancelled'])) {
+            $query->where('status', $status);
+        }
+
+        $filename = 'revenue_report_' . date('Ymd_His') . '.csv';
+
+        // ponytail: stream response via php://output stdlib fputcsv, add when asynchronous background queued export is needed for >50k rows
+        return response()->streamDownload(function () use ($query) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['Booking Code', 'Venue Name', 'Customer Name', 'Customer Email', 'Date', 'Time Slot', 'Duration (Hours)', 'Amount (IDR)', 'Status', 'Created At']);
+
+            $query->chunk(200, function ($bookings) use ($handle) {
+                foreach ($bookings as $b) {
+                    fputcsv($handle, [
+                        $b->booking_code,
+                        $b->lapangan->name ?? '-',
+                        $b->user->name ?? '-',
+                        $b->user->email ?? '-',
+                        $b->date,
+                        $b->time,
+                        $b->duration,
+                        $b->total_price,
+                        $b->status,
+                        $b->created_at ? $b->created_at->format('Y-m-d H:i:s') : '-',
+                    ]);
+                }
+            });
+
+            fclose($handle);
+        }, $filename, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
     }
 }

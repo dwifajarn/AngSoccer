@@ -9,7 +9,47 @@
             <h2 class="font-headline-lg text-headline-lg text-primary font-bold text-3xl">Revenue Reports</h2>
             <p class="text-on-surface-variant font-body-md mt-1">Laporan analisis pendapatan operasional sewa lapangan.</p>
         </div>
+        <div class="flex items-center gap-sm">
+            <a href="{{ route('admin.revenue.export', request()->query()) }}" class="inline-flex items-center gap-xs px-md py-sm bg-secondary text-white rounded-lg font-label-md hover:bg-secondary/90 transition-all shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">download</span>
+                <span>Export CSV</span>
+            </a>
+        </div>
     </header>
+
+    <!-- Filter Bar Card -->
+    <section class="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/20 mb-xl">
+        <form method="GET" action="{{ route('admin.revenue') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md items-end">
+            <div>
+                <label for="start_date" class="block text-xs font-semibold text-outline mb-1">Dari Tanggal</label>
+                <input type="date" name="start_date" id="start_date" value="{{ $startDate }}" class="w-full px-sm py-2 bg-surface-container-low border border-outline-variant/40 rounded-lg text-sm text-on-surface focus:outline-none focus:border-secondary">
+            </div>
+            <div>
+                <label for="end_date" class="block text-xs font-semibold text-outline mb-1">Sampai Tanggal</label>
+                <input type="date" name="end_date" id="end_date" value="{{ $endDate }}" class="w-full px-sm py-2 bg-surface-container-low border border-outline-variant/40 rounded-lg text-sm text-on-surface focus:outline-none focus:border-secondary">
+            </div>
+            <div>
+                <label for="status" class="block text-xs font-semibold text-outline mb-1">Status Pembayaran</label>
+                <select name="status" id="status" class="w-full px-sm py-2 bg-surface-container-low border border-outline-variant/40 rounded-lg text-sm text-on-surface focus:outline-none focus:border-secondary">
+                    <option value="">Semua Status</option>
+                    <option value="paid" {{ $status === 'paid' ? 'selected' : '' }}>Paid (Lunas)</option>
+                    <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="cancelled" {{ $status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                </select>
+            </div>
+            <div class="flex items-center gap-xs">
+                <button type="submit" class="flex-1 py-2 px-md bg-secondary text-white rounded-lg text-sm font-semibold hover:bg-secondary/90 transition-all flex items-center justify-center gap-xs">
+                    <span class="material-symbols-outlined text-[18px]">filter_alt</span>
+                    <span>Filter</span>
+                </button>
+                @if($startDate || $endDate || $status)
+                    <a href="{{ route('admin.revenue') }}" class="py-2 px-sm bg-surface-container-low text-on-surface-variant hover:text-on-surface rounded-lg text-sm border border-outline-variant/40 transition-all" title="Reset Filter">
+                        Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+    </section>
 
     <!-- Top Section: Summary Widgets -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg mb-2xl">
@@ -63,6 +103,9 @@
     <section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden">
         <div class="px-lg py-lg border-b border-outline-variant/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md bg-surface-container-low">
             <h3 class="font-headline-md text-headline-md text-primary font-bold text-lg">Transaction History</h3>
+            <div class="text-sm font-semibold text-on-surface">
+                Total Omzet Filter: <span class="text-secondary font-bold">Rp {{ number_format($filteredRevenue, 0, ',', '.') }}</span>
+            </div>
         </div>
         <div class="overflow-x-auto">
             @if($transactions->count() > 0)

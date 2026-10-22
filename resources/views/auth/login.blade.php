@@ -98,7 +98,7 @@
         </div>
 
         <div class="grid grid-cols-2 gap-md">
-            <button type="button"
+            <a href="{{ route('auth.google') }}"
                 class="flex items-center justify-center gap-sm py-3 px-md border border-outline/20 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors active:scale-95">
                 <svg class="w-5 h-5" viewBox="0 0 24 24">
                     <path
@@ -115,7 +115,7 @@
                         fill="currentColor"></path>
                 </svg>
                 Google
-            </button>
+            </a>
             <button type="button"
                 class="flex items-center justify-center gap-sm py-3 px-md border border-outline/20 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors active:scale-95">
                 <svg class="w-5 h-5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">

@@ -23,6 +23,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
     Route::view('/forgot-password', 'auth.forgot-password')->name('password.request');
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 });
 
 // Authenticated Routes
@@ -32,6 +34,7 @@ Route::middleware('auth')->group(function () {
     // Customer / User Routes
     Route::get('/fields', [FieldController::class, 'index'])->name('fields.index');
     Route::get('/booking-lapangan/{id}', [FieldController::class, 'show'])->name('booking.create');
+    Route::get('/booking-lapangan/{id}/bookings', [FieldController::class, 'getBookings'])->name('booking.slots');
     Route::post('/bookings', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/booking-history', [BookingController::class, 'history'])->name('bookings.history');
     Route::get('/pembayaran/konfirmasi/{booking}', [PaymentController::class, 'showKonfirmasi'])->name('pembayaran.konfirmasi');
@@ -56,6 +59,7 @@ Route::middleware('auth')->group(function () {
 
         // Revenue Reports
         Route::get('/revenue', [AdminDashboardController::class, 'revenue'])->name('admin.revenue');
+        Route::get('/revenue/export', [AdminDashboardController::class, 'exportRevenueCsv'])->name('admin.revenue.export');
 
         // Profile details
         Route::get('/profile', [AdminProfileController::class, 'show'])->name('admin.profile');
